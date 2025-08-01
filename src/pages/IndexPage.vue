@@ -365,9 +365,9 @@ const updateGame = () => {
     generateFood() // Generate new food to maintain count
 
     // Increase speed slightly
-    if (score.value % 50 === 0) {
+    if (score.value % 100 === 0) {
       clearInterval(gameLoop)
-      gameLoop = setInterval(updateGame, Math.max(50, gameSpeed - (score.value / 50) * 10))
+      gameLoop = setInterval(updateGame, Math.max(60, gameSpeed - (score.value / 100) * 5))
     }
   } else {
     // Remove tail if no food eaten
