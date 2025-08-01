@@ -20,6 +20,62 @@
         ></canvas>
       </div>
 
+      <!-- Mobile Controls -->
+      <div class="mobile-controls">
+        <div class="control-row">
+          <q-btn
+            class="control-btn up-btn"
+            @click="handleMobileControl('up')"
+            @touchstart="handleMobileControl('up')"
+            @touchend="preventDefault"
+            @mousedown="handleMobileControl('up')"
+            @mouseup="preventDefault"
+            round
+            color="primary"
+            size="lg"
+            icon="keyboard_arrow_up"
+          />
+        </div>
+        <div class="control-row">
+          <q-btn
+            class="control-btn left-btn"
+            @click="handleMobileControl('left')"
+            @touchstart="handleMobileControl('left')"
+            @touchend="preventDefault"
+            @mousedown="handleMobileControl('left')"
+            @mouseup="preventDefault"
+            round
+            color="primary"
+            size="lg"
+            icon="keyboard_arrow_left"
+          />
+          <q-btn
+            class="control-btn down-btn"
+            @click="handleMobileControl('down')"
+            @touchstart="handleMobileControl('down')"
+            @touchend="preventDefault"
+            @mousedown="handleMobileControl('down')"
+            @mouseup="preventDefault"
+            round
+            color="primary"
+            size="lg"
+            icon="keyboard_arrow_down"
+          />
+          <q-btn
+            class="control-btn right-btn"
+            @click="handleMobileControl('right')"
+            @touchstart="handleMobileControl('right')"
+            @touchend="preventDefault"
+            @mousedown="handleMobileControl('right')"
+            @mouseup="preventDefault"
+            round
+            color="primary"
+            size="lg"
+            icon="keyboard_arrow_right"
+          />
+        </div>
+      </div>
+
       <div class="game-controls">
         <q-btn
           v-if="!gameStarted"
@@ -42,7 +98,7 @@
         </q-btn>
 
         <div class="instructions">
-          <p>Use arrow keys or WASD to control the snake</p>
+          <p>Use arrow keys, WASD, or touch controls to control the snake</p>
           <p>Eat the food to grow and increase your score!</p>
         </div>
       </div>
@@ -163,6 +219,31 @@ const generateFood = () => {
       foods.splice(index, 1)
     }
   }, 7000)
+}
+
+// Handle mobile control input
+const handleMobileControl = (newDirection) => {
+  if (!gameStarted.value || gameOver.value) return
+
+  switch (newDirection) {
+    case 'up':
+      if (direction !== 'down') nextDirection = 'up'
+      break
+    case 'down':
+      if (direction !== 'up') nextDirection = 'down'
+      break
+    case 'left':
+      if (direction !== 'right') nextDirection = 'left'
+      break
+    case 'right':
+      if (direction !== 'left') nextDirection = 'right'
+      break
+  }
+}
+
+// Prevent default touch/mouse behavior
+const preventDefault = (event) => {
+  event.preventDefault()
 }
 
 // Handle keyboard input
@@ -553,6 +634,60 @@ onUnmounted(() => {
   cursor: pointer;
 }
 
+  .mobile-controls {
+    display: none; /* Hide by default on larger screens */
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    align-items: center;
+  }
+
+  .control-row {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .control-btn {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(52, 152, 219, 0.8);
+    border: 3px solid #2980b9;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    color: white;
+    font-weight: bold;
+  }
+
+  .control-btn:hover {
+    background: rgba(52, 152, 219, 1);
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  .control-btn:active {
+    background: rgba(41, 128, 185, 1);
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .control-btn.up-btn {
+    margin-bottom: 10px;
+  }
+
+  .control-btn.left-btn {
+    margin-right: 10px;
+  }
+
+  .control-btn.right-btn {
+    margin-left: 10px;
+  }
+
 .game-controls {
   text-align: center;
 }
@@ -623,35 +758,50 @@ onUnmounted(() => {
   min-width: 100px;
 }
 
-@media (max-width: 600px) {
-  .game-title {
-    font-size: 1.5rem;
-    margin: 0 0 5px 0;
-  }
+  @media (max-width: 600px) {
+    .game-title {
+      font-size: 1.5rem;
+      margin: 0 0 5px 0;
+    }
 
-  .game-info {
-    flex-direction: column;
-    gap: 5px;
-    margin-bottom: 10px;
-  }
+    .game-info {
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
 
-  .score, .high-score {
-    font-size: 1rem;
-    padding: 5px 10px;
-  }
+    .score, .high-score {
+      font-size: 1rem;
+      padding: 5px 10px;
+    }
 
-  .game-canvas {
-    width: 280px;
-    height: 280px;
-  }
+    .game-canvas {
+      width: 280px;
+      height: 280px;
+    }
 
-  .instructions {
-    font-size: 0.8rem;
-    margin-top: 10px;
-  }
+    .instructions {
+      font-size: 0.8rem;
+      margin-top: 10px;
+    }
 
-  .instructions p {
-    margin: 2px 0;
+    .instructions p {
+      margin: 2px 0;
+    }
+
+    .mobile-controls {
+      display: flex; /* Show on mobile screens */
+      margin-top: 15px;
+    }
+
+    .control-btn {
+      width: 60px;
+      height: 60px;
+      font-size: 0.9rem;
+    }
+
+    .control-row {
+      gap: 10px;
+    }
   }
-}
 </style>
